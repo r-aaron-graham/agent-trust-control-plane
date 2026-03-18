@@ -1,0 +1,9 @@
+[
+  "tests/test_evaluation.py::test_approved_when_citations_present",
+  "tests/test_evaluation.py::test_review_required_when_no_context",
+  "tests/test_policy.py::test_blocks_destructive_terms",
+  "tests/test_policy.py::test_disallowed_tools_denied",
+  "tests/test_policy.py::test_unknown_role_denied",
+  "tests/test_query_flow.py::test_denied_high_risk_request",
+  "tests/test_query_flow.py::test_query_returns_response_and_trace"
+]
