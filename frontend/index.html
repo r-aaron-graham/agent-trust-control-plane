@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Agent Trust Control Plane Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 1100px; margin: 0 auto; padding: 24px; background: #f7f8fa; color: #111; }
+    h1 { margin-bottom: 6px; }
+    .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+    .card { background: white; padding: 18px; border-radius: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    textarea, input, select { width: 100%; box-sizing: border-box; padding: 10px; margin-top: 6px; border-radius: 8px; border: 1px solid #d0d7de; }
+    button { margin-top: 12px; padding: 10px 16px; border: 0; border-radius: 999px; background: #111827; color: white; cursor: pointer; }
+    pre { background: #111827; color: #e5e7eb; padding: 14px; border-radius: 10px; overflow: auto; }
+    .muted { color: #555; }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Agent Trust Control Plane</h1>
+  <p class="muted">A demo UI for policy-aware, retrieval-scoped, review-capable AI request handling.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Run a Query</h2>
+      <label for="userId">User ID</label>
+      <input id="userId" value="aaron" />
+
+      <label for="role">Role</label>
+      <select id="role">
+        <option value="analyst">analyst</option>
+        <option value="architect" selected>architect</option>
+        <option value="admin">admin</option>
+      </select>
+
+      <label for="query">Query</label>
+      <textarea id="query" rows="8">How should we design a traceable AI agent for internal runbooks?</textarea>
+
+      <label for="tools">Requested tools (comma-separated)</label>
+      <input id="tools" value="search_docs" />
+
+      <button onclick="submitQuery()">Submit</button>
+
+      <h3>Response</h3>
+      <pre id="responseBox">Waiting for query...</pre>
+    </div>
+
+    <div class="card">
+      <h2>Latest Reviews</h2>
+      <button onclick="loadReviews()">Refresh Reviews</button>
+      <ul id="reviewsList"></ul>
+
+      <h2>Latest Traces</h2>
+      <button onclick="loadTraces()">Refresh Traces</button>
+      <ul id="tracesList"></ul>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
