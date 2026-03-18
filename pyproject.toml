@@ -1,0 +1,21 @@
+[project]
+name = "agent-trust-control-plane"
+version = "0.1.0"
+description = "Reference implementation of an AI agent control plane with policy, retrieval, evaluation, audit logging, and human review."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.116.1",
+  "uvicorn[standard]==0.35.0",
+  "pydantic==2.11.7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.4.1",
+  "httpx==0.28.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
