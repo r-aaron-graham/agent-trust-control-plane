@@ -1,0 +1,32 @@
+[
+  {
+    "doc_id": "doc-001",
+    "title": "Agent Traceability Standard",
+    "classification": "internal_docs",
+    "content": "Every production-oriented AI request should receive a trace identifier. Trace data should include retrieved sources, policy decisions, evaluation scores, and final disposition."
+  },
+  {
+    "doc_id": "doc-002",
+    "title": "Role-Aware Retrieval Policy",
+    "classification": "internal_docs",
+    "content": "Retrieval results must be filtered by the user's role and data classification. Do not expose restricted documents simply because they are semantically similar."
+  },
+  {
+    "doc_id": "doc-003",
+    "title": "Tool Execution Guardrails",
+    "classification": "internal_docs",
+    "content": "Tool calls should be governed by policy. Destructive actions must be blocked or escalated. Safe default behavior is to deny when uncertainty is high."
+  },
+  {
+    "doc_id": "doc-004",
+    "title": "Runtime Evaluation Guidance",
+    "classification": "internal_docs",
+    "content": "Responses should be evaluated for groundedness, citation support, and operational risk. Low-support outputs should trigger review instead of direct release."
+  },
+  {
+    "doc_id": "doc-005",
+    "title": "Sensitive Security Runbook",
+    "classification": "security_docs",
+    "content": "This runbook contains sensitive security operational steps and must only be accessible to admin role users."
+  }
+]
