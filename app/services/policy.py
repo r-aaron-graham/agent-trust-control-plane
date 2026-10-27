@@ -1,6 +1,5 @@
 from app.models.domain import PolicyDecision, UserContext
 
-
 ROLE_SCOPES = {
     "analyst": ["internal_docs"],
     "architect": ["internal_docs"],
