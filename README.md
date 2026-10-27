@@ -1,5 +1,10 @@
 # Agent Trust Control Plane
 
+[![CI](https://github.com/r-aaron-graham/agent-trust-control-plane/actions/workflows/ci.yml/badge.svg)](https://github.com/r-aaron-graham/agent-trust-control-plane/actions/workflows/ci.yml)
+![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)
+![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg?logo=docker&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A detailed reference implementation showing why **RAG is not enough** on its own and what it looks like to put a real **control plane** around an AI agent.
 
 This repository is intentionally designed to support the architectural argument from the article:
@@ -149,6 +154,28 @@ Then open:
 - API docs: `http://localhost:8000/docs`
 - Demo UI: `frontend/index.html`
 
+### Docker
+
+```bash
+docker compose up --build
+```
+
+The image runs as a non-root user and has a healthcheck on `/api/v1/health`. No API keys are needed; answers come from a deterministic generator.
+
+### Configuration
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `APP_NAME` | `Agent Trust Control Plane` | Service name in `/health` |
+| `APP_ENV` | `development` | Environment label |
+| `LOG_LEVEL` | `INFO` | Python logging level |
+| `CORS_ORIGINS` | `*` | Comma-separated allowed origins. Set real origins when deployed. |
+| `RETRIEVAL_DATA_PATH` | `app/data/sample_documents.json` | Corpus file read by retrieval and written by `/api/v1/ingest` |
+
+### Identity model
+
+Identity comes from the `X-User-Id` and `X-User-Role` headers so the policy layer is easy to explore. That is a demo stand-in for SSO or JWT validation: in a real deployment, put this behind an authenticating gateway that sets those headers. Writing to the corpus (`POST /api/v1/ingest`) requires the `admin` role, because it changes what every user's agent can retrieve.
+
 ---
 
 ## Example API usage
@@ -232,12 +259,19 @@ The repository includes tests for:
 - evaluation thresholds
 - end-to-end query flow
 - review queue behavior
+- access control and validation: only admins can ingest, unknown classifications and malformed IDs are rejected, duplicate document IDs return 409, security documents stay out of non-admin scopes, unknown roles and disallowed tools are denied
+- review state: a resolved review cannot be flipped (409)
+- tests run against a temporary copy of the corpus, so they never modify tracked data
 
 Run tests with:
 
 ```bash
-pytest -q
+pip install -r requirements-dev.txt
+make lint   # ruff
+make test   # pytest with coverage
 ```
+
+CI also builds the Docker image, waits for its healthcheck, checks an approved and a denied query end to end, and confirms anonymous ingest is refused.
 
 ---
 

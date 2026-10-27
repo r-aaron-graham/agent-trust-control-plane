@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from app.models.domain import RetrievedDocument
+
+
+class DuplicateDocumentError(ValueError):
+    pass
 
 
 class RetrievalService:
@@ -13,8 +18,8 @@ class RetrievalService:
     In a production build, replace this with a proper hybrid/vector retrieval stack.
     """
 
-    def __init__(self, data_path: str = "app/data/sample_documents.json") -> None:
-        self.data_path = Path(data_path)
+    def __init__(self, data_path: str | None = None) -> None:
+        self.data_path = Path(data_path or os.getenv("RETRIEVAL_DATA_PATH", "app/data/sample_documents.json"))
         self._documents = self._load_documents()
 
     def _load_documents(self) -> list[dict]:
@@ -23,6 +28,8 @@ class RetrievalService:
         return json.loads(self.data_path.read_text(encoding="utf-8"))
 
     def ingest(self, doc_id: str, title: str, classification: str, content: str) -> None:
+        if any(doc["doc_id"] == doc_id for doc in self._documents):
+            raise DuplicateDocumentError(f"Document '{doc_id}' already exists")
         self._documents.append(
             {
                 "doc_id": doc_id,

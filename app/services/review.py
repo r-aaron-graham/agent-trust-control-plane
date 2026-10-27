@@ -7,6 +7,10 @@ from uuid import uuid4
 from app.models.domain import ReviewCase
 
 
+class ReviewAlreadyResolvedError(Exception):
+    pass
+
+
 class ReviewService:
     """
     Simple in-memory human review queue.
@@ -36,13 +40,17 @@ class ReviewService:
         return self._cases.get(review_id)
 
     def approve(self, review_id: str) -> ReviewCase | None:
-        case = self._cases.get(review_id)
-        if case:
-            case.status = "approved"
-        return case
+        return self._resolve(review_id, "approved")
 
     def reject(self, review_id: str) -> ReviewCase | None:
-        case = self._cases.get(review_id)
-        if case:
-            case.status = "rejected"
-        return case
+        return self._resolve(review_id, "rejected")
+
+    def _resolve(self, review_id: str, status: str) -> ReviewCase | None:
+        with self._lock:
+            case = self._cases.get(review_id)
+            if case is None:
+                return None
+            if case.status != "pending":
+                raise ReviewAlreadyResolvedError(f"Review {review_id} is already {case.status}")
+            case.status = status
+            return case

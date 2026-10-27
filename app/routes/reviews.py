@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.dependencies import review_service
 from app.models.schemas import ReviewActionResponse, ReviewRecord
+from app.services.review import ReviewAlreadyResolvedError
 
 router = APIRouter(tags=["reviews"])
 
@@ -23,7 +24,10 @@ def list_reviews() -> list[ReviewRecord]:
 
 @router.post("/reviews/{review_id}/approve", response_model=ReviewActionResponse)
 def approve_review(review_id: str) -> ReviewActionResponse:
-    case = review_service.approve(review_id)
+    try:
+        case = review_service.approve(review_id)
+    except ReviewAlreadyResolvedError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     if case is None:
         raise HTTPException(status_code=404, detail="Review case not found")
     return ReviewActionResponse(
@@ -35,7 +39,10 @@ def approve_review(review_id: str) -> ReviewActionResponse:
 
 @router.post("/reviews/{review_id}/reject", response_model=ReviewActionResponse)
 def reject_review(review_id: str) -> ReviewActionResponse:
-    case = review_service.reject(review_id)
+    try:
+        case = review_service.reject(review_id)
+    except ReviewAlreadyResolvedError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     if case is None:
         raise HTTPException(status_code=404, detail="Review case not found")
     return ReviewActionResponse(
