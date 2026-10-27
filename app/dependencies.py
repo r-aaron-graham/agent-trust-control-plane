@@ -7,7 +7,6 @@ from app.services.policy import PolicyService
 from app.services.retrieval import RetrievalService
 from app.services.review import ReviewService
 
-
 identity_service = IdentityService()
 policy_service = PolicyService()
 retrieval_service = RetrievalService()

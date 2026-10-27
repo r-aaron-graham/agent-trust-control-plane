@@ -22,8 +22,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=settings.cors_origins,
+    # Identity travels in headers, not cookies, so credentialed CORS is not needed.
+    # (allow_origins=["*"] with credentials lets any site make credentialed calls.)
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
