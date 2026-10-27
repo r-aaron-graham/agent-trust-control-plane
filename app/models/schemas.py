@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -21,10 +21,11 @@ class QueryResponse(BaseModel):
 
 
 class IngestRequest(BaseModel):
-    doc_id: str
-    title: str
-    classification: str
-    content: str
+    doc_id: str = Field(min_length=1, max_length=100, pattern=r"^[A-Za-z0-9_.:-]+$")
+    title: str = Field(min_length=1, max_length=300)
+    # Must be a data scope the policy layer knows about (see ROLE_SCOPES).
+    classification: Literal["internal_docs", "security_docs"]
+    content: str = Field(min_length=1, max_length=50_000)
 
 
 class TraceRecord(BaseModel):
