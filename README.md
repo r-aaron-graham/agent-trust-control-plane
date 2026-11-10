@@ -127,6 +127,19 @@ Low-confidence or high-risk responses are routed into a lightweight review queue
 
 ## Quickstart
 
+### Run the five-minute reviewer demo
+
+From the repository root, with Python 3.11 or later:
+
+```bash
+python -m pip install -r requirements.txt
+python -m scripts.demo
+```
+
+The demo uses synthetic identities and the bundled document corpus. It exercises the
+API in process and prints three outcomes: a cited answer with a trace, a policy
+denial, and a low-evidence response routed for human review. No API keys are needed.
+
 ### Local setup
 
 1. Clone the repository
@@ -141,7 +154,7 @@ source .venv/bin/activate  # macOS/Linux
 # .venv\Scripts\activate   # Windows
 
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --host 127.0.0.1 --reload
 ```
 
 Then open:
@@ -188,7 +201,7 @@ The answer generator:
 
 - summarizes retrieved documents
 - includes citations
-- respects allowed tool lists
+- displays allowed tool names without executing tools
 - produces structured metadata for evaluation
 
 In a real deployment, the same orchestration pattern can sit in front of OpenAI, Anthropic, Azure OpenAI, local models, or another model gateway.
@@ -197,7 +210,7 @@ In a real deployment, the same orchestration pattern can sit in front of OpenAI,
 
 ## Production notes
 
-This is a **reference implementation**, not a full enterprise platform.
+This reference implementation is intended for local demonstrations. Identity headers are simulated, and audit, ingestion, and review endpoints require authentication and authorization before deployment.
 
 For a production path, the next obvious upgrades are:
 
