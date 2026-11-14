@@ -268,3 +268,7 @@ docker run --rm -p 127.0.0.1:8000:8000 reviewer-smoke
 ```
 
 From another terminal, run `curl --fail http://127.0.0.1:8000/api/v1/health`. Expect HTTP 200. Use synthetic queries on loopback. The sample identity and review endpoints require real authentication, authorization, and persistent audit storage before shared use.
+
+## Reproduce the tested dependency set
+
+Use Python 3.12 on Linux. Add `-c requirements.lock` to the documented pip install command. CI and the default Docker build use these same constraints. The security workflow audits the pinned Python packages for known advisories.
