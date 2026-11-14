@@ -5,14 +5,14 @@ description = "Reference implementation of an AI agent control plane with policy
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "fastapi==0.116.1",
+  "fastapi==0.162.7",
   "uvicorn[standard]==0.35.0",
   "pydantic==2.11.7",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "pytest==8.4.1",
+  "pytest==9.0.3",
   "httpx==0.28.1",
 ]
 
