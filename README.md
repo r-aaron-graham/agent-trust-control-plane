@@ -259,3 +259,12 @@ pytest -q
 RAG improves context. It does not by itself establish identity, authorization, policy, evaluation, observability, or safe operational boundaries.
 
 That is the purpose of this repository: to show what a more governable AI agent looks like in code.
+
+## Deployment verification
+
+```sh
+docker build -t reviewer-smoke .
+docker run --rm -p 127.0.0.1:8000:8000 reviewer-smoke
+```
+
+From another terminal, run `curl --fail http://127.0.0.1:8000/api/v1/health`. Expect HTTP 200. Use synthetic queries on loopback. The sample identity and review endpoints require real authentication, authorization, and persistent audit storage before shared use.
